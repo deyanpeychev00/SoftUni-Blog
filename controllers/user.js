@@ -39,7 +39,7 @@ module.exports = {
                             return;
                         }
 
-                        res.redirect('/')
+                        res.redirect('/');
                     })
                 })
             }
@@ -62,12 +62,17 @@ module.exports = {
 
             req.logIn(user, (err) => {
                 if (err) {
-                    console.log(err);
-                    res.redirect('/user/login', {error: err.message});
+                    res.render('/user/login', {error: err.message});
                     return;
                 }
 
-                res.redirect('/');
+                let returnUrl = '/';
+                if(req.session.returnUrl) {
+                    returnUrl = req.session.returnUrl;
+                    delete req.session.returnUrl;
+                }
+
+                res.redirect(returnUrl);
             })
         })
     },
